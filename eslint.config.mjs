@@ -104,6 +104,7 @@ const eslintConfig = [
       'react/jsx-uses-react': 'off',
       'react/prop-types': 'off',
       'react/no-unstable-nested-components': 'error',
+      'react/no-array-index-key': 'error',
       'react/jsx-sort-props': [
         'error',
         {

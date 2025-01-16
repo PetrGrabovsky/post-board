@@ -1,7 +1,30 @@
+'use client';
+
 import clsx from 'clsx';
 import Link from 'next/link';
+import { useState } from 'react';
+
+const data = [
+  {
+    id: 1,
+    name: 'John Doe',
+    publishedAt: '2024-01-01',
+    text: `Lorem ipsum dolor sit amet consectetur adipisicing elit. Animi accusamus incidunt
+      quos eius reprehenderit. Consequatur accusamus et commodi aut enim nobis, est accusantium
+      ratione necessitatibus expedita eveniet? Cumque, numquam quae?`,
+  },
+  {
+    id: 2,
+    name: 'John Doe',
+    publishedAt: '2024-01-02',
+    text: 'Foo',
+  },
+];
 
 const Home = () => {
+  const [name, setName] = useState('');
+  const [text, setText] = useState('');
+
   return (
     <>
       <nav className='flex h-20 items-center justify-start bg-red-950 px-8 py-3'>
@@ -37,6 +60,8 @@ const Home = () => {
                   name='name'
                   placeholder='Your name'
                   type='text'
+                  value={name}
+                  onChange={(event) => setName(event.target.value)}
                 />
               </label>
             </div>
@@ -52,6 +77,8 @@ const Home = () => {
                   name='text'
                   placeholder='Some post'
                   rows={4}
+                  value={text}
+                  onChange={(event) => setText(event.target.value)}
                 />
               </label>
             </div>
@@ -64,32 +91,30 @@ const Home = () => {
         </form>
         <section className='space-y-4'>
           <ul>
-            <li>
-              <div
-                className={clsx(
-                  'my-3 flex items-start justify-between gap-5 rounded border border-stone-700',
-                  'p-4',
-                )}
-              >
-                <div className='flex-none'>
-                  <div className='flex-row'>
-                    <div>
-                      <strong>John Doe the First o...</strong>
-                    </div>
-                    <div>
-                      <em>10. 2. 2024 - 21:17:41</em>
+            {data.map(({ id, name: author, publishedAt, text: content }) => (
+              <li key={id}>
+                <div
+                  className={clsx(
+                    'my-3 flex items-start justify-between gap-5 rounded border border-stone-700',
+                    'p-4',
+                  )}
+                >
+                  <div className='flex-none'>
+                    <div className='flex-row'>
+                      <div>
+                        <strong>{author}</strong>
+                      </div>
+                      <div>
+                        <em>{publishedAt}</em>
+                      </div>
                     </div>
                   </div>
+                  <div className='flex-1'>
+                    <p className='overflow-hidden text-ellipsis'>{content}</p>
+                  </div>
                 </div>
-                <div className='flex-1'>
-                  <p className='overflow-hidden text-ellipsis'>
-                    Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Duis condimentum augue
-                    id magna semper rutrum. Pellentesque arcu. Etiam dictum tincidunt diam. In
-                    rutrum. Morbi scelerisque luctus velit. Null...
-                  </p>
-                </div>
-              </div>
-            </li>
+              </li>
+            ))}
           </ul>
         </section>
       </section>
