@@ -136,6 +136,12 @@ const eslintConfig = [
       ],
 
       // Další pravidla
+      'jsx-a11y/label-has-associated-control': [
+        'error',
+        {
+          assert: 'nesting',
+        },
+      ],
       'no-await-in-loop': 'error',
       'require-await': 'error', // Zakazuje await v cyklu
       'no-console': ['warn', { allow: ['warn', 'error'] }], // Povoluje console.warn a console.error
@@ -143,6 +149,20 @@ const eslintConfig = [
       'no-alert': 'error',
       eqeqeq: ['error', 'always', { null: 'ignore' }], // Striktní porovnávání s výjimkou null
       'no-var': 'error', // Nepoužívat var
+      'no-restricted-exports': [
+        'error',
+        {
+          restrictDefaultExports: {
+            direct: true,
+          },
+        },
+      ],
+    },
+  },
+  {
+    files: ['src/app/**/*.tsx', 'eslint.config.mjs'],
+    rules: {
+      'no-restricted-exports': 'off',
     },
   },
 ];
