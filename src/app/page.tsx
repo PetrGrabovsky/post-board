@@ -21,6 +21,9 @@ const data = [
   },
 ];
 
+const truncate = (text: string, length = 20) =>
+  text.length > length ? `${text.slice(0, Math.max(0, length))}...` : text;
+
 const Home = () => {
   const [name, setName] = useState('');
   const [text, setText] = useState('');
@@ -99,10 +102,10 @@ const Home = () => {
                     'p-4',
                   )}
                 >
-                  <div className='flex-none'>
+                  <div className='w-32 flex-none'>
                     <div className='flex-row'>
                       <div>
-                        <strong>{author}</strong>
+                        <strong>{truncate(author)}</strong>
                       </div>
                       <div>
                         <em>{publishedAt}</em>
@@ -110,7 +113,7 @@ const Home = () => {
                     </div>
                   </div>
                   <div className='flex-1'>
-                    <p className='overflow-hidden text-ellipsis'>{content}</p>
+                    <p className='overflow-hidden text-ellipsis'>{truncate(content, 200)}</p>
                   </div>
                 </div>
               </li>

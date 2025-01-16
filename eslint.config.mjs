@@ -143,6 +143,7 @@ const eslintConfig = [
           assert: 'nesting',
         },
       ],
+      'prefer-template': 'error',
       'no-await-in-loop': 'error',
       'require-await': 'error', // Zakazuje await v cyklu
       'no-console': ['warn', { allow: ['warn', 'error'] }], // Povoluje console.warn a console.error
