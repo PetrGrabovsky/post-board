@@ -2,13 +2,13 @@
 
 import clsx from 'clsx';
 import Link from 'next/link';
-import { useState } from 'react';
+import { FormEvent, useState } from 'react';
 
 const data = [
   {
     id: 1,
     name: 'John Doe',
-    publishedAt: '2024-01-01',
+    publishedAt: new Date(),
     text: `Lorem ipsum dolor sit amet consectetur adipisicing elit. Animi accusamus incidunt
       quos eius reprehenderit. Consequatur accusamus et commodi aut enim nobis, est accusantium
       ratione necessitatibus expedita eveniet? Cumque, numquam quae?`,
@@ -16,7 +16,7 @@ const data = [
   {
     id: 2,
     name: 'John Doe',
-    publishedAt: '2024-01-02',
+    publishedAt: new Date(),
     text: 'Foo',
   },
 ];
@@ -24,9 +24,17 @@ const data = [
 const truncate = (text: string, length = 20) =>
   text.length > length ? `${text.slice(0, Math.max(0, length))}...` : text;
 
+const formatDate = (date: Date) => `${date.toLocaleDateString()} - ${date.toLocaleTimeString()}`;
+
 const Home = () => {
   const [name, setName] = useState('');
   const [text, setText] = useState('');
+  const [posts, setPosts] = useState(data);
+
+  const handleSubmit = (event: FormEvent<HTMLFormElement>) => {
+    event.preventDefault();
+    setPosts([{ id: posts.length + 1, name, text, publishedAt: new Date() }, ...posts]);
+  };
 
   return (
     <>
@@ -49,7 +57,7 @@ const Home = () => {
         </ul>
       </nav>
       <section className='container mx-auto flex flex-col space-y-4 px-4 py-3 text-left'>
-        <form>
+        <form onSubmit={handleSubmit}>
           <div>
             <div className='mt-2'>
               <label className='mb-2 block text-sm font-medium' htmlFor='name'>
@@ -94,7 +102,7 @@ const Home = () => {
         </form>
         <section className='space-y-4'>
           <ul>
-            {data.map(({ id, name: author, publishedAt, text: content }) => (
+            {posts.map(({ id, name: author, publishedAt, text: content }) => (
               <li key={id}>
                 <div
                   className={clsx(
@@ -108,7 +116,7 @@ const Home = () => {
                         <strong>{truncate(author)}</strong>
                       </div>
                       <div>
-                        <em>{publishedAt}</em>
+                        <em>{formatDate(publishedAt)}</em>
                       </div>
                     </div>
                   </div>
