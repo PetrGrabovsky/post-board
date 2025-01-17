@@ -159,6 +159,11 @@ const eslintConfig = [
           },
         },
       ],
+      'padding-line-between-statements': [
+        'error',
+        { blankLine: 'always', prev: '*', next: 'return' }, // Vždy prázdný řádek před `return`
+      ],
+      'no-shadow': 'error', // Zakáže stínění proměnných
     },
   },
   {

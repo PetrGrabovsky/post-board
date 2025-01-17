@@ -21,13 +21,34 @@ const data = [
   },
 ];
 
+const DEFAULT_ERRORS = { name: '', text: '' };
+
 const truncate = (text: string, length = 20) =>
   text.length > length ? `${text.slice(0, Math.max(0, length))}...` : text;
 
 const formatDate = (date: Date) => `${date.toLocaleDateString()} - ${date.toLocaleTimeString()}`;
 
+const validateForm = (name: string, text: string) => {
+  const errors = { ...DEFAULT_ERRORS };
+
+  if (name.trim().length === 0) {
+    errors.name = 'Name is required';
+  } else if (name.trim().length < 3) {
+    errors.name = 'Name must be at least 3 characters long';
+  }
+
+  if (text.trim().length === 0) {
+    errors.text = 'Text is required';
+  } else if (text.trim().length < 3) {
+    errors.text = 'Text must be at least 3 characters long';
+  }
+
+  return errors;
+};
+
 const Home = () => {
   const [posts, setPosts] = useState(data);
+  const [errors, setErrors] = useState({ ...DEFAULT_ERRORS });
 
   const inputReference = useRef<HTMLInputElement>(null);
   const textAreaReference = useRef<HTMLTextAreaElement>(null);
@@ -35,10 +56,14 @@ const Home = () => {
   const handleSubmit = (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
 
-    const name = inputReference.current?.value;
-    const text = inputReference.current?.value;
+    const name = inputReference.current?.value || '';
+    const text = textAreaReference.current?.value || '';
 
-    if (!name || !text) {
+    const validatedErrors = validateForm(name, text);
+
+    if (validatedErrors.name || validatedErrors.text) {
+      setErrors(validatedErrors);
+
       return;
     }
 
@@ -46,6 +71,8 @@ const Home = () => {
       { id: posts.length + 1, name, text, publishedAt: new Date() },
       ...currentPosts,
     ]);
+
+    setErrors({ ...DEFAULT_ERRORS });
 
     inputReference.current!.value = '';
     textAreaReference.current!.value = '';
@@ -79,7 +106,6 @@ const Home = () => {
                 Your name:
                 <input
                   ref={inputReference}
-                  required
                   className={clsx(
                     'w-full rounded-md border border-gray-300 px-4 py-2 shadow-sm',
                     'focus:border-indigo-500 focus:outline-none focus:ring-indigo-500',
@@ -90,13 +116,13 @@ const Home = () => {
                   type='text'
                 />
               </label>
+              <div className='text-red-500'>{errors.name}</div>
             </div>
             <div className='mt-2'>
               <label className='mb-2 block text-sm font-medium' htmlFor='text'>
                 Your post:
                 <textarea
                   ref={textAreaReference}
-                  required
                   className={clsx(
                     'w-full rounded-md border border-gray-300 px-4 py-2 shadow-sm',
                     'focus:border-indigo-500 focus:outline-none focus:ring-indigo-500',
@@ -107,6 +133,7 @@ const Home = () => {
                   rows={4}
                 />
               </label>
+              <div className='text-red-500'>{errors.text}</div>
             </div>
           </div>
           <div className='mt-2'>
