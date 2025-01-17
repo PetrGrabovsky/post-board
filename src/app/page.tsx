@@ -2,7 +2,7 @@
 
 import clsx from 'clsx';
 import Link from 'next/link';
-import { FormEvent, useState } from 'react';
+import { FormEvent, useRef, useState } from 'react';
 
 const data = [
   {
@@ -27,19 +27,28 @@ const truncate = (text: string, length = 20) =>
 const formatDate = (date: Date) => `${date.toLocaleDateString()} - ${date.toLocaleTimeString()}`;
 
 const Home = () => {
-  const [name, setName] = useState('');
-  const [text, setText] = useState('');
   const [posts, setPosts] = useState(data);
+
+  const inputReference = useRef<HTMLInputElement>(null);
+  const textAreaReference = useRef<HTMLTextAreaElement>(null);
 
   const handleSubmit = (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
+
+    const name = inputReference.current?.value;
+    const text = inputReference.current?.value;
+
+    if (!name || !text) {
+      return;
+    }
+
     setPosts((currentPosts) => [
       { id: posts.length + 1, name, text, publishedAt: new Date() },
       ...currentPosts,
     ]);
 
-    setName('');
-    setText('');
+    inputReference.current!.value = '';
+    textAreaReference.current!.value = '';
   };
 
   return (
@@ -69,6 +78,8 @@ const Home = () => {
               <label className='mb-2 block text-sm font-medium' htmlFor='name'>
                 Your name:
                 <input
+                  ref={inputReference}
+                  required
                   className={clsx(
                     'w-full rounded-md border border-gray-300 px-4 py-2 shadow-sm',
                     'focus:border-indigo-500 focus:outline-none focus:ring-indigo-500',
@@ -77,8 +88,6 @@ const Home = () => {
                   name='name'
                   placeholder='Your name'
                   type='text'
-                  value={name}
-                  onChange={(event) => setName(event.target.value)}
                 />
               </label>
             </div>
@@ -86,6 +95,8 @@ const Home = () => {
               <label className='mb-2 block text-sm font-medium' htmlFor='text'>
                 Your post:
                 <textarea
+                  ref={textAreaReference}
+                  required
                   className={clsx(
                     'w-full rounded-md border border-gray-300 px-4 py-2 shadow-sm',
                     'focus:border-indigo-500 focus:outline-none focus:ring-indigo-500',
@@ -94,8 +105,6 @@ const Home = () => {
                   name='text'
                   placeholder='Some post'
                   rows={4}
-                  value={text}
-                  onChange={(event) => setText(event.target.value)}
                 />
               </label>
             </div>
