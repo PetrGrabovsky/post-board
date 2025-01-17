@@ -2,7 +2,7 @@
 
 import clsx from 'clsx';
 import Link from 'next/link';
-import { FormEvent, useRef, useState } from 'react';
+import { useActionState, useState } from 'react';
 
 const data = [
   {
@@ -21,7 +21,7 @@ const data = [
   },
 ];
 
-const DEFAULT_ERRORS = { name: '', text: '' };
+const DEFAULT_FORM_STATE = { name: '', text: '', errors: { name: '', text: '' } };
 
 const truncate = (text: string, length = 20) =>
   text.length > length ? `${text.slice(0, Math.max(0, length))}...` : text;
@@ -29,7 +29,7 @@ const truncate = (text: string, length = 20) =>
 const formatDate = (date: Date) => `${date.toLocaleDateString()} - ${date.toLocaleTimeString()}`;
 
 const validateForm = (name: string, text: string) => {
-  const errors = { ...DEFAULT_ERRORS };
+  const errors = { ...DEFAULT_FORM_STATE.errors };
 
   if (name.trim().length === 0) {
     errors.name = 'Name is required';
@@ -48,35 +48,35 @@ const validateForm = (name: string, text: string) => {
 
 const Home = () => {
   const [posts, setPosts] = useState(data);
-  const [errors, setErrors] = useState({ ...DEFAULT_ERRORS });
+  const [state, submitAction] = useActionState<
+    { name: string; text: string; errors: { name: string; text: string } },
+    FormData
+  >(
+    (_, payload) => {
+      const name = payload.get('name') as string;
+      const text = payload.get('text') as string;
 
-  const inputReference = useRef<HTMLInputElement>(null);
-  const textAreaReference = useRef<HTMLTextAreaElement>(null);
+      const errors = validateForm(name, text);
 
-  const handleSubmit = (event: FormEvent<HTMLFormElement>) => {
-    event.preventDefault();
+      if (errors.name || errors.text) {
+        return { text, name, errors };
+      }
 
-    const name = inputReference.current?.value || '';
-    const text = textAreaReference.current?.value || '';
+      setPosts((currentPosts) => [
+        { id: currentPosts.length + 1, name, text, publishedAt: new Date() },
+        ...currentPosts,
+      ]);
 
-    const validatedErrors = validateForm(name, text);
+      return { ...DEFAULT_FORM_STATE };
+    },
+    { ...DEFAULT_FORM_STATE },
+  );
 
-    if (validatedErrors.name || validatedErrors.text) {
-      setErrors(validatedErrors);
-
-      return;
-    }
-
-    setPosts((currentPosts) => [
-      { id: posts.length + 1, name, text, publishedAt: new Date() },
-      ...currentPosts,
-    ]);
-
-    setErrors({ ...DEFAULT_ERRORS });
-
-    inputReference.current!.value = '';
-    textAreaReference.current!.value = '';
-  };
+  const {
+    errors: { name: nameError, text: textError },
+    name: nameValue,
+    text: textValue,
+  } = state;
 
   return (
     <>
@@ -99,41 +99,41 @@ const Home = () => {
         </ul>
       </nav>
       <section className='container mx-auto flex flex-col space-y-4 px-4 py-3 text-left'>
-        <form onSubmit={handleSubmit}>
+        <form action={submitAction}>
           <div>
             <div className='mt-2'>
               <label className='mb-2 block text-sm font-medium' htmlFor='name'>
                 Your name:
                 <input
-                  ref={inputReference}
                   className={clsx(
                     'w-full rounded-md border border-gray-300 px-4 py-2 shadow-sm',
                     'focus:border-indigo-500 focus:outline-none focus:ring-indigo-500',
                   )}
+                  defaultValue={nameValue}
                   id='name'
                   name='name'
                   placeholder='Your name'
                   type='text'
                 />
               </label>
-              <div className='text-red-500'>{errors.name}</div>
+              <div className='text-red-500'>{nameError}</div>
             </div>
             <div className='mt-2'>
               <label className='mb-2 block text-sm font-medium' htmlFor='text'>
                 Your post:
                 <textarea
-                  ref={textAreaReference}
                   className={clsx(
                     'w-full rounded-md border border-gray-300 px-4 py-2 shadow-sm',
                     'focus:border-indigo-500 focus:outline-none focus:ring-indigo-500',
                   )}
+                  defaultValue={textValue}
                   id='text'
                   name='text'
                   placeholder='Some post'
                   rows={4}
                 />
               </label>
-              <div className='text-red-500'>{errors.text}</div>
+              <div className='text-red-500'>{textError}</div>
             </div>
           </div>
           <div className='mt-2'>
