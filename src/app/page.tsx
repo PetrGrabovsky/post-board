@@ -33,7 +33,13 @@ const Home = () => {
 
   const handleSubmit = (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
-    setPosts([{ id: posts.length + 1, name, text, publishedAt: new Date() }, ...posts]);
+    setPosts((currentPosts) => [
+      { id: posts.length + 1, name, text, publishedAt: new Date() },
+      ...currentPosts,
+    ]);
+
+    setName('');
+    setText('');
   };
 
   return (
