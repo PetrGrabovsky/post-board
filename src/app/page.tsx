@@ -4,6 +4,8 @@ import clsx from 'clsx';
 import Link from 'next/link';
 import { useActionState, useState } from 'react';
 
+import { FormGroup } from './components/FormGroup';
+
 const data = [
   {
     id: 1,
@@ -101,40 +103,32 @@ const Home = () => {
       <section className='container mx-auto flex flex-col space-y-4 px-4 py-3 text-left'>
         <form action={submitAction}>
           <div>
-            <div className='mt-2'>
-              <label className='mb-2 block text-sm font-medium' htmlFor='name'>
-                Your name:
-                <input
-                  className={clsx(
-                    'w-full rounded-md border border-gray-300 px-4 py-2 shadow-sm',
-                    'focus:border-indigo-500 focus:outline-none focus:ring-indigo-500',
-                  )}
-                  defaultValue={nameValue}
-                  id='name'
-                  name='name'
-                  placeholder='Your name'
-                  type='text'
-                />
-              </label>
-              <div className='text-red-500'>{nameError}</div>
-            </div>
-            <div className='mt-2'>
-              <label className='mb-2 block text-sm font-medium' htmlFor='text'>
-                Your post:
-                <textarea
-                  className={clsx(
-                    'w-full rounded-md border border-gray-300 px-4 py-2 shadow-sm',
-                    'focus:border-indigo-500 focus:outline-none focus:ring-indigo-500',
-                  )}
-                  defaultValue={textValue}
-                  id='text'
-                  name='text'
-                  placeholder='Some post'
-                  rows={4}
-                />
-              </label>
-              <div className='text-red-500'>{textError}</div>
-            </div>
+            <FormGroup error={nameError} id='name' label='Your name'>
+              <input
+                className={clsx(
+                  'w-full rounded-md border border-gray-300 px-4 py-2 shadow-sm',
+                  'focus:outline-none focus:ring-indigo-500',
+                )}
+                defaultValue={nameValue}
+                id='name'
+                name='name'
+                placeholder='Your name'
+                type='text'
+              />
+            </FormGroup>
+            <FormGroup error={textError} id='text' label='Your post'>
+              <textarea
+                className={clsx(
+                  'w-full rounded-md border border-gray-300 px-4 py-2 shadow-sm',
+                  'focus:border-indigo-500 focus:outline-none focus:ring-indigo-500',
+                )}
+                defaultValue={textValue}
+                id='text'
+                name='text'
+                placeholder='Some post'
+                rows={4}
+              />
+            </FormGroup>
           </div>
           <div className='mt-2'>
             <button className='w-fit bg-green-600 px-6 py-3 font-bold text-white' type='submit'>
