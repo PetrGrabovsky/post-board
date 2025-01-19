@@ -1,15 +1,17 @@
 import clsx from 'clsx';
 import { FC } from 'react';
 
+import { TPost } from '../types';
+
 const truncate = (text: string, length = 20) =>
   text.length > length ? `${text.slice(0, Math.max(0, length))}...` : text;
 
 const formatDate = (date: Date) => `${date.toLocaleDateString()} - ${date.toLocaleTimeString()}`;
 
 interface IPostItemProperties {
-  name: string;
-  publishedAt: Date;
-  text: string;
+  name: TPost['name'];
+  publishedAt: TPost['publishedAt'];
+  text: TPost['text'];
 }
 
 export const PostItem: FC<IPostItemProperties> = ({ name, publishedAt, text }) => {
