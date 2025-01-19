@@ -4,7 +4,7 @@ interface IFormGroupProperties {
   id: string;
   label: string;
   children: ReactNode;
-  error: string;
+  error?: string;
 }
 
 export const FormGroup: FC<IFormGroupProperties> = ({ id, label, children, error }) => {
@@ -14,7 +14,7 @@ export const FormGroup: FC<IFormGroupProperties> = ({ id, label, children, error
         {label}
         {children}
       </label>
-      <div className='text-red-500'>{error}</div>
+      {error && <div className='text-red-500'>{error}</div>}
     </div>
   );
 };
