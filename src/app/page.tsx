@@ -2,10 +2,11 @@
 
 import clsx from 'clsx';
 import Link from 'next/link';
-import { useActionState, useState } from 'react';
+import { FC, useActionState, useState } from 'react';
 
 import { FormGroup } from './components/FormGroup';
-import { PostItem } from './components/PostItem';
+import { PostList } from './components/PostList';
+import { TPost } from './types';
 
 const data = [
   {
@@ -44,8 +45,8 @@ const validateForm = (name: string, text: string) => {
   return errors;
 };
 
-const Home = () => {
-  const [posts, setPosts] = useState(data);
+const Home: FC = () => {
+  const [posts, setPosts] = useState<TPost[]>(data);
   const [state, submitAction] = useActionState<
     { name: string; text: string; errors: { name: string; text: string } },
     FormData
@@ -133,11 +134,7 @@ const Home = () => {
           </div>
         </form>
         <section className='space-y-4'>
-          <ul>
-            {posts.map(({ id, name, publishedAt, text }) => (
-              <PostItem key={id} name={name} publishedAt={publishedAt} text={text} />
-            ))}
-          </ul>
+          <PostList posts={posts} />
         </section>
       </section>
     </>
