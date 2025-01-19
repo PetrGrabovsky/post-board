@@ -5,6 +5,7 @@ import Link from 'next/link';
 import { useActionState, useState } from 'react';
 
 import { FormGroup } from './components/FormGroup';
+import { PostItem } from './components/PostItem';
 
 const data = [
   {
@@ -24,11 +25,6 @@ const data = [
 ];
 
 const DEFAULT_FORM_STATE = { name: '', text: '', errors: { name: '', text: '' } };
-
-const truncate = (text: string, length = 20) =>
-  text.length > length ? `${text.slice(0, Math.max(0, length))}...` : text;
-
-const formatDate = (date: Date) => `${date.toLocaleDateString()} - ${date.toLocaleTimeString()}`;
 
 const validateForm = (name: string, text: string) => {
   const errors = { ...DEFAULT_FORM_STATE.errors };
@@ -138,29 +134,8 @@ const Home = () => {
         </form>
         <section className='space-y-4'>
           <ul>
-            {posts.map(({ id, name: author, publishedAt, text: content }) => (
-              <li key={id}>
-                <div
-                  className={clsx(
-                    'my-3 flex items-start justify-between gap-5 rounded border border-stone-700',
-                    'p-4',
-                  )}
-                >
-                  <div className='w-32 flex-none'>
-                    <div className='flex-row'>
-                      <div>
-                        <strong>{truncate(author)}</strong>
-                      </div>
-                      <div>
-                        <em>{formatDate(publishedAt)}</em>
-                      </div>
-                    </div>
-                  </div>
-                  <div className='flex-1'>
-                    <p className='overflow-hidden text-ellipsis'>{truncate(content, 200)}</p>
-                  </div>
-                </div>
-              </li>
+            {posts.map(({ id, name, publishedAt, text }) => (
+              <PostItem key={id} name={name} publishedAt={publishedAt} text={text} />
             ))}
           </ul>
         </section>
