@@ -133,9 +133,7 @@ const Home: FC = () => {
             </button>
           </div>
         </form>
-        <section className='space-y-4'>
-          <PostList posts={posts} />
-        </section>
+        <section className='space-y-4'>{posts.length > 0 && <PostList posts={posts} />}</section>
       </section>
     </>
   );

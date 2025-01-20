@@ -6,15 +6,24 @@ import { TPost } from '../types';
 const truncate = (text: string, length = 20) =>
   text.length > length ? `${text.slice(0, Math.max(0, length))}...` : text;
 
-const formatDate = (date: Date) => `${date.toLocaleDateString()} - ${date.toLocaleTimeString()}`;
+const formatDate = (date: Date, hasExactDate: boolean) =>
+  hasExactDate
+    ? `${date.toLocaleDateString()} - ${date.toLocaleTimeString()}`
+    : date.toLocaleDateString();
 
 interface IPostItemProperties {
   name: TPost['name'];
   publishedAt: TPost['publishedAt'];
   text: TPost['text'];
+  hasExactDate?: boolean;
 }
 
-export const PostItem: FC<IPostItemProperties> = ({ name, publishedAt, text }) => {
+export const PostItem: FC<IPostItemProperties> = ({
+  name,
+  publishedAt,
+  text,
+  hasExactDate = true,
+}) => {
   return (
     <li>
       <div
@@ -28,7 +37,7 @@ export const PostItem: FC<IPostItemProperties> = ({ name, publishedAt, text }) =
               <strong>{truncate(name)}</strong>
             </div>
             <div>
-              <em>{formatDate(publishedAt)}</em>
+              <em>{formatDate(publishedAt, hasExactDate)}</em>
             </div>
           </div>
         </div>

@@ -11,7 +11,7 @@ export const PostList: FC<IPostListProperties> = ({ posts }) => {
   return (
     <ul>
       {posts.map(({ id, name, publishedAt, text }) => (
-        <PostItem key={id} name={name} publishedAt={publishedAt} text={text} />
+        <PostItem key={id} hasExactDate={false} name={name} publishedAt={publishedAt} text={text} />
       ))}
     </ul>
   );
