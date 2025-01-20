@@ -5,6 +5,11 @@ import { FormGroup } from './FormGroup';
 
 const DEFAULT_FORM_STATE = { name: '', text: '', errors: { name: '', text: '' } };
 
+const FIELD_CLASS_NAME = clsx(
+  'w-full rounded-md border border-gray-300 px-4 py-2 shadow-sm focus:outline-none',
+  'focus:ring-indigo-500',
+);
+
 const validateForm = (name: string, text: string) => {
   const errors = { ...DEFAULT_FORM_STATE.errors };
 
@@ -60,10 +65,7 @@ export const PostForm: FC<IPostFormProperties> = ({ onSubmit }) => {
       <div>
         <FormGroup error={nameError} id='name' label='Your name'>
           <input
-            className={clsx(
-              'w-full rounded-md border border-gray-300 px-4 py-2 shadow-sm',
-              'focus:outline-none focus:ring-indigo-500',
-            )}
+            className={FIELD_CLASS_NAME}
             defaultValue={nameValue}
             id='name'
             name='name'
@@ -73,10 +75,7 @@ export const PostForm: FC<IPostFormProperties> = ({ onSubmit }) => {
         </FormGroup>
         <FormGroup error={textError} id='text' label='Your post'>
           <textarea
-            className={clsx(
-              'w-full rounded-md border border-gray-300 px-4 py-2 shadow-sm',
-              'focus:border-indigo-500 focus:outline-none focus:ring-indigo-500',
-            )}
+            className={FIELD_CLASS_NAME}
             defaultValue={textValue}
             id='text'
             name='text'
