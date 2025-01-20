@@ -1,14 +1,16 @@
 'use client';
 
 import Link from 'next/link';
-import { FC, useState } from 'react';
+import { FC, useEffect, useState } from 'react';
 
 import { PostForm } from './components/PostForm';
 import { PostList } from './components/PostList';
 import { TPost } from './types';
 
+const API_URL = process.env.NEXT_PUBLIC_API_URL!;
+
 const handleSubmit = async (name: string, text: string) => {
-  await fetch('http://localhost:3030/posts', {
+  await fetch(API_URL, {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify({ name, text, publishedAt: Date.now() }),
@@ -16,7 +18,17 @@ const handleSubmit = async (name: string, text: string) => {
 };
 
 const Home: FC = () => {
-  const [posts] = useState<TPost[]>([]);
+  const [posts, setPosts] = useState<TPost[]>([]);
+
+  const fetchPosts = async () => {
+    const response = await fetch(API_URL);
+    const data = (await response.json()) as TPost[];
+    setPosts(data);
+  };
+
+  useEffect(() => {
+    fetchPosts();
+  }, []);
 
   return (
     <>

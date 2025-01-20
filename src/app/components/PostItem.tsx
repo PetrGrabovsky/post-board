@@ -6,10 +6,13 @@ import { TPost } from '../types';
 const truncate = (text: string, length = 20) =>
   text.length > length ? `${text.slice(0, Math.max(0, length))}...` : text;
 
-const formatDate = (date: Date, hasExactDate: boolean) =>
-  hasExactDate
+const formatDate = (time: number, hasExactDate: boolean) => {
+  const date = new Date(time);
+
+  return hasExactDate
     ? `${date.toLocaleDateString()} - ${date.toLocaleTimeString()}`
     : date.toLocaleDateString();
+};
 
 interface IPostItemProperties {
   name: TPost['name'];
