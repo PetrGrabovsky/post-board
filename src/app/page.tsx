@@ -7,32 +7,16 @@ import { PostForm } from './components/PostForm';
 import { PostList } from './components/PostList';
 import { TPost } from './types';
 
-const data = [
-  {
-    id: 1,
-    name: 'John Doe',
-    publishedAt: new Date(),
-    text: `Lorem ipsum dolor sit amet consectetur adipisicing elit. Animi accusamus incidunt
-      quos eius reprehenderit. Consequatur accusamus et commodi aut enim nobis, est accusantium
-      ratione necessitatibus expedita eveniet? Cumque, numquam quae?`,
-  },
-  {
-    id: 2,
-    name: 'John Doe',
-    publishedAt: new Date(),
-    text: 'Foo',
-  },
-];
+const handleSubmit = async (name: string, text: string) => {
+  await fetch('http://localhost:3030/posts', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ name, text, publishedAt: Date.now() }),
+  });
+};
 
 const Home: FC = () => {
-  const [posts, setPosts] = useState<TPost[]>(data);
-
-  const handleSubmit = (name: string, text: string) => {
-    setPosts((currentPosts) => [
-      { id: currentPosts.length + 1, name, text, publishedAt: new Date() },
-      ...currentPosts,
-    ]);
-  };
+  const [posts] = useState<TPost[]>([]);
 
   return (
     <>
