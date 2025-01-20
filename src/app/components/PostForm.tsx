@@ -1,32 +1,13 @@
 import clsx from 'clsx';
 import { FC, useActionState } from 'react';
 
+import { DEFAULT_FORM_STATE, submitForm } from '../actions/submitForm';
 import { FormGroup } from './FormGroup';
-
-const DEFAULT_FORM_STATE = { name: '', text: '', errors: { name: '', text: '' } };
 
 const FIELD_CLASS_NAME = clsx(
   'w-full rounded-md border border-gray-300 px-4 py-2 shadow-sm focus:outline-none',
   'focus:ring-indigo-500',
 );
-
-const validateForm = (name: string, text: string) => {
-  const errors = { ...DEFAULT_FORM_STATE.errors };
-
-  if (name.trim().length === 0) {
-    errors.name = 'Name is required';
-  } else if (name.trim().length < 3) {
-    errors.name = 'Name must be at least 3 characters long';
-  }
-
-  if (text.trim().length === 0) {
-    errors.text = 'Text is required';
-  } else if (text.trim().length < 3) {
-    errors.text = 'Text must be at least 3 characters long';
-  }
-
-  return errors;
-};
 
 interface IPostFormProperties {
   onSubmit: (name: string, text: string) => void;
@@ -36,23 +17,7 @@ export const PostForm: FC<IPostFormProperties> = ({ onSubmit }) => {
   const [state, submitAction] = useActionState<
     { name: string; text: string; errors: { name: string; text: string } },
     FormData
-  >(
-    (_, payload) => {
-      const name = payload.get('name') as string;
-      const text = payload.get('text') as string;
-
-      const errors = validateForm(name, text);
-
-      if (errors.name || errors.text) {
-        return { text, name, errors };
-      }
-
-      onSubmit(name, text);
-
-      return { ...DEFAULT_FORM_STATE };
-    },
-    { ...DEFAULT_FORM_STATE },
-  );
+  >(submitForm(onSubmit), { ...DEFAULT_FORM_STATE });
 
   const {
     errors: { name: nameError, text: textError },
