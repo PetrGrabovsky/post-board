@@ -11,9 +11,10 @@ const FIELD_CLASS_NAME = clsx(
 
 interface IPostFormProperties {
   onSubmit: (name: string, text: string) => Promise<void>;
+  apiError?: string;
 }
 
-export const PostForm: FC<IPostFormProperties> = ({ onSubmit }) => {
+export const PostForm: FC<IPostFormProperties> = ({ onSubmit, apiError }) => {
   const [state, submitAction] = useActionState<
     { name: string; text: string; errors: { name: string; text: string } },
     FormData
@@ -27,6 +28,7 @@ export const PostForm: FC<IPostFormProperties> = ({ onSubmit }) => {
 
   return (
     <form action={submitAction}>
+      {apiError && <div className='text-red-500'>{apiError}</div>}
       <div>
         <FormGroup error={nameError} id='name' label='Your name'>
           <input
