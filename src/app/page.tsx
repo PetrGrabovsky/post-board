@@ -16,13 +16,12 @@ const getUrl = () => {
   return url;
 };
 
-const addPost = async (name: string, text: string) => {
+const addPost = async (name: string, text: string) =>
   await fetch(getUrl(), {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify({ name, text, publishedAt: Date.now() }),
   });
-};
 
 const Posts: FC = () => {
   const [posts, setPosts] = useState<TPost[]>([]);
@@ -46,7 +45,19 @@ const Posts: FC = () => {
   };
 
   const handleSubmit = async (name: string, text: string) => {
-    await addPost(name, text);
+    try {
+      const response = await addPost(name, text);
+
+      if (!response.ok) {
+        throw new Error(response.statusText);
+      }
+    } catch (error) {
+      setApiError(
+        `Failed to add post: ${error instanceof Error ? error.message : 'Unknown error'}`,
+      );
+
+      throw error;
+    }
     fetchPosts();
   };
 

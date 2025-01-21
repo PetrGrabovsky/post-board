@@ -19,8 +19,8 @@ const validateForm = (name: string, text: string) => {
 };
 
 export const submitForm =
-  (onSubmit: (name: string, text: string) => void) =>
-  (
+  (onSubmit: (name: string, text: string) => Promise<void>) =>
+  async (
     _: { name: string; text: string; errors: { name: string; text: string } },
     payload: FormData,
   ) => {
@@ -33,7 +33,11 @@ export const submitForm =
       return { text, name, errors };
     }
 
-    onSubmit(name, text);
+    try {
+      await onSubmit(name, text);
+    } catch {
+      return { name, text, errors };
+    }
 
     return { ...DEFAULT_FORM_STATE };
   };
