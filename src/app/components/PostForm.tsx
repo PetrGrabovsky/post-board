@@ -10,7 +10,7 @@ const FIELD_CLASS_NAME = clsx(
 );
 
 interface IPostFormProperties {
-  onSubmit: (name: string, text: string) => void;
+  onSubmit: (name: string, text: string) => Promise<void>;
 }
 
 export const PostForm: FC<IPostFormProperties> = ({ onSubmit }) => {

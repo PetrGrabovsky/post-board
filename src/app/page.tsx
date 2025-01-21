@@ -9,7 +9,7 @@ import { TPost } from './types';
 
 const API_URL = process.env.NEXT_PUBLIC_API_URL!;
 
-const handleSubmit = async (name: string, text: string) => {
+const addPost = async (name: string, text: string) => {
   await fetch(API_URL, {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
@@ -24,6 +24,11 @@ const Home: FC = () => {
     const response = await fetch(API_URL);
     const data = (await response.json()) as TPost[];
     setPosts(data);
+  };
+
+  const handleSubmit = async (name: string, text: string) => {
+    await addPost(name, text);
+    fetchPosts();
   };
 
   useEffect(() => {
