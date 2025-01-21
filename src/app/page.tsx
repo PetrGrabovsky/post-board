@@ -9,19 +9,26 @@ import { TPost } from './types';
 
 const API_URL = process.env.NEXT_PUBLIC_API_URL!;
 
+const getUrl = () => {
+  const url = new URL(API_URL);
+  url.searchParams.append('_sort', '-publishedAt');
+
+  return url;
+};
+
 const addPost = async (name: string, text: string) => {
-  await fetch(API_URL, {
+  await fetch(getUrl(), {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify({ name, text, publishedAt: Date.now() }),
   });
 };
 
-const Home: FC = () => {
+const Posts: FC = () => {
   const [posts, setPosts] = useState<TPost[]>([]);
 
   const fetchPosts = async () => {
-    const response = await fetch(API_URL);
+    const response = await fetch(getUrl());
     const data = (await response.json()) as TPost[];
     setPosts(data);
   };
@@ -63,4 +70,4 @@ const Home: FC = () => {
   );
 };
 
-export default Home;
+export default Posts;
