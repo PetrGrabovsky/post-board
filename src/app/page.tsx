@@ -26,8 +26,11 @@ const addPost = async (name: string, text: string) =>
 const Posts: FC = () => {
   const [posts, setPosts] = useState<TPost[]>([]);
   const [apiError, setApiError] = useState('');
+  const [loading, setLoading] = useState(false);
 
   const fetchPosts = async () => {
+    setLoading(true);
+
     try {
       const response = await fetch(getUrl());
 
@@ -41,6 +44,8 @@ const Posts: FC = () => {
       setApiError(
         `Failed to fetch posts: ${error instanceof Error ? error.message : 'Unknown error'}`,
       );
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -87,7 +92,9 @@ const Posts: FC = () => {
       </nav>
       <section className='container mx-auto flex flex-col space-y-4 px-4 py-3 text-left'>
         <PostForm apiError={apiError} onSubmit={handleSubmit} />
-        <section className='space-y-4'>{posts.length > 0 && <PostList posts={posts} />}</section>
+        <section className='space-y-4'>
+          {loading ? <div>Loading...</div> : posts.length > 0 && <PostList posts={posts} />}
+        </section>
       </section>
     </>
   );
