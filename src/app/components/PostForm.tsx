@@ -3,6 +3,7 @@ import { FC, useActionState } from 'react';
 
 import { DEFAULT_FORM_STATE, submitForm } from '../actions/submitForm';
 import { FormGroup } from './FormGroup';
+import { SubmitButton } from './SubmitButton';
 
 const FIELD_CLASS_NAME = clsx(
   'w-full rounded-md border border-gray-300 px-4 py-2 shadow-sm focus:outline-none',
@@ -52,9 +53,7 @@ export const PostForm: FC<IPostFormProperties> = ({ onSubmit, apiError }) => {
         </FormGroup>
       </div>
       <div className='mt-2'>
-        <button className='w-fit bg-green-600 px-6 py-3 font-bold text-white' type='submit'>
-          Submit
-        </button>
+        <SubmitButton>Submit</SubmitButton>
       </div>
     </form>
   );
