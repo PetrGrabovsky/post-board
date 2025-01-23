@@ -5,15 +5,7 @@ import { FC, useEffect, useState } from 'react';
 import { PostForm } from './components/PostForm';
 import { PostList } from './components/PostList';
 import { TPost } from './types';
-
-const API_URL = process.env.NEXT_PUBLIC_API_URL!;
-
-const getUrl = () => {
-  const url = new URL(API_URL);
-  url.searchParams.append('_sort', '-publishedAt');
-
-  return url;
-};
+import { getUrl } from './utils/getUrl';
 
 const addPost = async (name: string, text: string) =>
   await fetch(getUrl(), {
