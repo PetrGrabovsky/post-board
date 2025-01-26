@@ -1,8 +1,9 @@
 'use client';
 
 import clsx from 'clsx';
+import { debounce } from 'lodash';
 import { useRouter, useSearchParams } from 'next/navigation';
-import { ChangeEvent, FC, useEffect, useState } from 'react';
+import { ChangeEvent, FC, useEffect, useMemo, useState } from 'react';
 
 import { PostList } from '../components/PostList';
 import { TPost } from '../types';
@@ -46,13 +47,19 @@ const Search: FC = () => {
     }
   };
 
+  const debouncedFetchPosts = useMemo(() => debounce(fetchPosts, 500), []);
+
   const handleChange = (event: ChangeEvent<HTMLInputElement>) => {
     setSearch(event.target.value);
   };
 
   useEffect(() => {
-    fetchPosts(search);
-  }, [search]);
+    debouncedFetchPosts(search);
+
+    return () => {
+      debouncedFetchPosts.cancel();
+    };
+  }, [search, debouncedFetchPosts]);
 
   useEffect(() => {
     const newParameters = new URLSearchParams(searchParameters.toString());
