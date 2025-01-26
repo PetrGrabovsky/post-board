@@ -23,6 +23,7 @@
   },
   "dependencies": {
     "clsx": "^2.1.1",
+    "lodash": "^4.17.21",
     "next": "15.1.3",
     "react": "^19.0.0",
     "react-dom": "^19.0.0"
@@ -31,6 +32,7 @@
     "@eslint/eslintrc": "^3",
     "@prettier/plugin-xml": "^3.4.1",
     "@types/json-server": "^0.14.7",
+    "@types/lodash": "^4.17.14",
     "@types/node": "^20",
     "@types/react": "^19",
     "@types/react-dom": "^19",
