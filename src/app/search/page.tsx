@@ -1,17 +1,23 @@
 'use client';
 
 import clsx from 'clsx';
+import { useRouter, useSearchParams } from 'next/navigation';
 import { ChangeEvent, FC, useEffect, useState } from 'react';
 
 import { PostList } from '../components/PostList';
 import { TPost } from '../types';
 import { getUrl } from '../utils/getUrl';
 
+const SEARCH_PARAMETER = 'term';
+
 const Search: FC = () => {
+  const router = useRouter();
+  const searchParameters = useSearchParams();
+
   const [posts, setPosts] = useState<TPost[]>([]);
   const [apiError, setApiError] = useState('');
   const [loading, setLoading] = useState(false);
-  const [search, setSearch] = useState('');
+  const [search, setSearch] = useState(searchParameters.get(SEARCH_PARAMETER) || '');
 
   const fetchPosts = async (term: string) => {
     if (!term.trim()) {
@@ -47,6 +53,13 @@ const Search: FC = () => {
   useEffect(() => {
     fetchPosts(search);
   }, [search]);
+
+  useEffect(() => {
+    const newParameters = new URLSearchParams(searchParameters.toString());
+    newParameters.set(SEARCH_PARAMETER, search);
+
+    router.replace(`?${newParameters.toString()}`);
+  }, [search, searchParameters, router]);
 
   return (
     <>
