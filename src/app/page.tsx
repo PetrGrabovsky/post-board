@@ -63,6 +63,7 @@ const Posts: FC = () => {
 
   return (
     <>
+      <title>{`Posts - ${posts.length > 0 ? `See ${posts.length} posts` : 'No posts'}`}</title>
       <PostForm apiError={apiError} onSubmit={handleSubmit} />
       <section className='space-y-4'>
         {loading ? <div>Loading...</div> : posts.length > 0 && <PostList posts={posts} />}
