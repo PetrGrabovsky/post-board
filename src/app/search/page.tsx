@@ -1,7 +1,53 @@
+'use client';
+
 import clsx from 'clsx';
-import { FC } from 'react';
+import { ChangeEvent, FC, useEffect, useState } from 'react';
+
+import { PostList } from '../components/PostList';
+import { TPost } from '../types';
+import { getUrl } from '../utils/getUrl';
 
 const Search: FC = () => {
+  const [posts, setPosts] = useState<TPost[]>([]);
+  const [apiError, setApiError] = useState('');
+  const [loading, setLoading] = useState(false);
+  const [search, setSearch] = useState('');
+
+  const fetchPosts = async (term: string) => {
+    if (!term.trim()) {
+      setPosts([]);
+
+      return;
+    }
+
+    setLoading(true);
+
+    try {
+      const response = await fetch(getUrl(term));
+
+      if (!response.ok) {
+        throw new Error(response.statusText);
+      }
+
+      const data = (await response.json()) as TPost[];
+      setPosts(data);
+    } catch (error) {
+      setApiError(
+        `Failed to fetch posts: ${error instanceof Error ? error.message : 'Unknown error'}`,
+      );
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const handleChange = (event: ChangeEvent<HTMLInputElement>) => {
+    setSearch(event.target.value);
+  };
+
+  useEffect(() => {
+    fetchPosts(search);
+  }, [search]);
+
   return (
     <>
       <div className='w-1/3'>
@@ -14,44 +60,20 @@ const Search: FC = () => {
                   'w-full rounded-md border border-gray-300 px-4 py-2 shadow-sm',
                   'focus:border-indigo-500 focus:outline-none focus:ring-indigo-500',
                 )}
-                defaultValue='john'
                 id='search'
                 name='search'
                 placeholder='Search...'
                 type='text'
+                value={search}
+                onChange={handleChange}
               />
             </label>
           </form>
         </div>
       </div>
+      {apiError && <div className='text-red-500'>{apiError}</div>}
       <section className='space-y-4'>
-        <ul>
-          <li>
-            <div
-              className={clsx(
-                'my-3 flex items-start justify-between gap-5 rounded border border-stone-700 p-4',
-              )}
-            >
-              <div className='flex-none'>
-                <div className='flex-row'>
-                  <div>
-                    <strong>John Doe the First o...</strong>
-                  </div>
-                  <div>
-                    <em>10. 2. 2024 - 21:17:41</em>
-                  </div>
-                </div>
-              </div>
-              <div className='flex-1'>
-                <p className='overflow-hidden text-ellipsis'>
-                  Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Duis condimentum augue
-                  id magna semper rutrum. Pellentesque arcu. Etiam dictum tincidunt diam. In rutrum.
-                  Morbi scelerisque luctus velit. Null...
-                </p>
-              </div>
-            </div>
-          </li>
-        </ul>
+        {loading ? <div>Loading...</div> : posts.length > 0 && <PostList posts={posts} />}
       </section>
     </>
   );
