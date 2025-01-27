@@ -5,11 +5,13 @@ import { debounce } from 'lodash';
 import { useRouter, useSearchParams } from 'next/navigation';
 import { ChangeEvent, FC, useEffect, useMemo, useState } from 'react';
 
+import { FormGroup } from '../components/FormGroup';
 import { PostList } from '../components/PostList';
 import { TPost } from '../types';
 import { getUrl } from '../utils/getUrl';
 
 const SEARCH_PARAMETER = 'term';
+const SEARCH_ID = 'search';
 
 const Search: FC = () => {
   const router = useRouter();
@@ -74,21 +76,20 @@ const Search: FC = () => {
       <div className='w-1/3'>
         <div className='mt-2'>
           <form>
-            <label className='mb-2 block text-sm font-medium' htmlFor='search'>
-              Search:
+            <FormGroup error={apiError} id={SEARCH_ID} label='Search'>
               <input
                 className={clsx(
                   'w-full rounded-md border border-gray-300 px-4 py-2 shadow-sm',
                   'focus:border-indigo-500 focus:outline-none focus:ring-indigo-500',
                 )}
-                id='search'
-                name='search'
+                id={SEARCH_ID}
+                name={SEARCH_ID}
                 placeholder='Search...'
                 type='text'
                 value={search}
                 onChange={handleChange}
               />
-            </label>
+            </FormGroup>
           </form>
         </div>
       </div>
