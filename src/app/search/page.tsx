@@ -90,9 +90,7 @@ const Search: FC = () => {
         </div>
       </div>
       {apiError && <div className='text-red-500'>{apiError}</div>}
-      <section className='space-y-4'>
-        {loading ? <div>Loading...</div> : posts.length > 0 && <PostList posts={posts} />}
-      </section>
+      <PostList isLoading={loading} posts={posts} />
     </>
   );
 };
