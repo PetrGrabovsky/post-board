@@ -1,7 +1,8 @@
 import clsx from 'clsx';
 import { FC, useActionState } from 'react';
 
-import { DEFAULT_FORM_STATE, submitForm } from '../actions/submitForm';
+import { submitForm } from '../actions/submitForm';
+import { DEFAULT_FORM_STATE, NAME_ID, TEXT_ID } from '../constants';
 import { FormGroup } from './FormGroup';
 import { SubmitButton } from './SubmitButton';
 
@@ -31,22 +32,22 @@ export const PostForm: FC<IPostFormProperties> = ({ onSubmit, apiError }) => {
     <form action={submitAction}>
       {apiError && <div className='text-red-500'>{apiError}</div>}
       <div>
-        <FormGroup error={nameError} id='name' label='Your name'>
+        <FormGroup error={nameError} id={NAME_ID} label='Your name'>
           <input
             className={FIELD_CLASS_NAME}
             defaultValue={nameValue}
-            id='name'
-            name='name'
+            id={NAME_ID}
+            name={NAME_ID}
             placeholder='Your name'
             type='text'
           />
         </FormGroup>
-        <FormGroup error={textError} id='text' label='Your post'>
+        <FormGroup error={textError} id={TEXT_ID} label='Your post'>
           <textarea
             className={FIELD_CLASS_NAME}
             defaultValue={textValue}
-            id='text'
-            name='text'
+            id={TEXT_ID}
+            name={TEXT_ID}
             placeholder='Some post'
             rows={4}
           />
