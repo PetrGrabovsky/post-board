@@ -4,6 +4,7 @@ import { debounce } from 'lodash';
 import { useRouter, useSearchParams } from 'next/navigation';
 import { ChangeEvent, FC, useEffect, useMemo, useState } from 'react';
 
+import { ErrorMessage } from '../components/ErrorMessage';
 import { FormGroup } from '../components/FormGroup';
 import { Input } from '../components/Input';
 import { PostList } from '../components/PostList';
@@ -89,7 +90,7 @@ const Search: FC = () => {
           </form>
         </div>
       </div>
-      {apiError && <div className='text-red-500'>{apiError}</div>}
+      {apiError && <ErrorMessage>{apiError}</ErrorMessage>}
       <PostList isLoading={loading} posts={posts} />
     </>
   );

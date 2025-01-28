@@ -1,5 +1,7 @@
 import { FC, ReactNode } from 'react';
 
+import { ErrorMessage } from './ErrorMessage';
+
 interface IFormGroupProperties {
   id: string;
   label: string;
@@ -14,7 +16,7 @@ export const FormGroup: FC<IFormGroupProperties> = ({ id, label, children, error
         {label}
         {children}
       </label>
-      {error && <div className='text-red-500'>{error}</div>}
+      {error && <ErrorMessage>{error}</ErrorMessage>}
     </div>
   );
 };
