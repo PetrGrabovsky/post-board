@@ -2,6 +2,7 @@ import { FC } from 'react';
 
 import { TPost } from '../types';
 import { PostItem } from './PostItem';
+import { Spinner } from './Spinner/Spinner';
 
 interface IPostListProperties {
   posts: TPost[];
@@ -12,7 +13,7 @@ export const PostList: FC<IPostListProperties> = ({ posts, isLoading = false }) 
   let result = <div className='text-gray-500'>No posts found</div>;
 
   if (isLoading) {
-    result = <div>Loading...</div>;
+    result = <Spinner />;
   } else if (posts.length > 0 && !isLoading) {
     result = (
       <ul>
