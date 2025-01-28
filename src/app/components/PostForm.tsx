@@ -1,3 +1,5 @@
+'use client';
+
 import { FC, useActionState } from 'react';
 
 import { submitForm } from '../actions/submitForm';
