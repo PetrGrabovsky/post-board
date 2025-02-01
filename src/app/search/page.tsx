@@ -26,7 +26,7 @@ const Search: FC = () => {
     const { signal } = controller;
 
     if (debouncedSearch.trim()) {
-      getData(debouncedSearch, signal);
+      getData(signal, debouncedSearch);
     } else {
       setPosts([]);
     }

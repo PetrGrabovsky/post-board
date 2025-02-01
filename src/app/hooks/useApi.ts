@@ -13,7 +13,7 @@ export const useApi = () => {
   const [apiError, setApiError] = useState('');
   const [loading, setLoading] = useState(false);
 
-  const getData = useCallback(async (searchParameter?: string, signal?: AbortSignal) => {
+  const getData = useCallback(async (signal?: AbortSignal, searchParameter?: string) => {
     setLoading(true);
 
     try {
