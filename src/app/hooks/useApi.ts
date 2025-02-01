@@ -52,5 +52,5 @@ export const useApi = () => {
     }
   };
 
-  return { getData, postData, posts, apiError, loading };
+  return { getData, postData, posts, setPosts, apiError, loading };
 };
