@@ -13,11 +13,11 @@ export const useApi = () => {
   const [apiError, setApiError] = useState('');
   const [loading, setLoading] = useState(false);
 
-  const getData = useCallback(async (searchParameter?: string) => {
+  const getData = useCallback(async (searchParameter?: string, signal?: AbortSignal) => {
     setLoading(true);
 
     try {
-      const response = await fetch(getUrl(searchParameter));
+      const response = await fetch(getUrl(searchParameter), { signal });
 
       if (!response.ok) {
         throw new Error(response.statusText);
