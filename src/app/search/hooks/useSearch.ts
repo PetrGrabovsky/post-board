@@ -3,6 +3,7 @@ import { ChangeEvent, useEffect, useState } from 'react';
 import { useDebounce } from 'use-debounce';
 
 import { useApi } from '@/app/hooks/useApi';
+import { getAbortController } from '@/app/utils/getAbortController';
 
 import { SEARCH_PARAMETER } from '../constants';
 
@@ -19,8 +20,7 @@ export const useSearch = () => {
   };
 
   useEffect(() => {
-    const controller = new AbortController();
-    const { signal } = controller;
+    const { controller, signal } = getAbortController();
 
     if (debouncedSearch.trim()) {
       getData(signal, debouncedSearch);
